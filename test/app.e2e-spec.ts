@@ -1,21 +1,41 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { ZBClient } from 'zeebe-node';
 
-// tslint:disable: no-console
+describe('gRPC Mock', () => {
+  // beforeAll(async () => {
+  //   const moduleFixture: TestingModule = await Test.createTestingModule({
+  //     imports: [AppModule],
+  //   }).compile();
 
-describe('Topology', () => {
-  it('Can service a Topology request', async done => {
-    const zb = new ZBClient({
-      loglevel: 'DEBUG',
-      retry: false,
-      onConnectionError: () => console.log('Connection Error'),
+  //   const app = moduleFixture.createNestApplication();
+  //   await app.init();
+  // });
+
+  describe('Topology', () => {
+    it('Can service a Topology request', async done => {
+      const zb = new ZBClient({
+        loglevel: 'DEBUG',
+        retry: true,
+        onConnectionError: () => console.log('Connection Error'),
+      });
+      const t = await zb.topology();
+      expect(t.clusterSize).toBe(1);
+      zb.close().then(done);
     });
-    const t = await zb.topology();
-    expect(t.clusterSize).toBe(1);
-    console.log('Here!');
-    zb.close().then(done);
+  });
+
+  describe('CreateWorkflowInstance', () => {
+    it('Can create a workflow instance', async done => {
+      const zb = new ZBClient({
+        loglevel: 'INFO',
+        retry: false,
+        onConnectionError: () => console.log('Connection Error'),
+      });
+      const t = await zb.createWorkflowInstance('order-process', {});
+      expect(t).toBeTruthy();
+      zb.close().then(done);
+    });
   });
 });
 

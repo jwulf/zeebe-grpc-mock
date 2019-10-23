@@ -1,3 +1,23 @@
+# GRPC Gateway Mock for Zeebe
+
+WIP
+
+To run:
+
+```bash
+npm i 
+npm run start:dev
+```
+
+To run a little test:
+
+```bash
+cd test
+ts-node client.ts | pino-pretty
+``
+
+To get the Broker backpressure to work, we need this: [https://github.com/nestjs/nest/pull/1957](https://github.com/nestjs/nest/pull/1957)
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
